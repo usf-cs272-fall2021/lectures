@@ -9,12 +9,9 @@ public class VersionCheck {
 	/**
 	 * A simple Person record. Feature available from Java 16+.
 	 *
-	 * Javadoc warning bug already reported at:
-	 * <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=572367">
-	 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=572367</a>
-	 *
 	 * @param name the name of the person
 	 */
+	@SuppressWarnings("javadoc") // see: https://bugs.eclipse.org/bugs/show_bug.cgi?id=572367
 	record Person(String name) { }
 
 	/**
