@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
  * exception handling in depth!
  *
  * @see <a href="https://en.wikipedia.org/wiki/Leet">Leet - Wikipedia</a>
+ *
+ * @author CS 272 Software Development (University of San Francisco)
+ * @version Fall 2021
  */
 public class EliteFileConverter {
 	/**
@@ -61,7 +64,8 @@ public class EliteFileConverter {
 	 * attempt to be converted.
 	 *
 	 * @param text the text to convert
-	 * @param threshold the percentage of time letters should be converted
+	 * @param threshold the percentage of time letters should be converted (should be
+	 *   a value between 0 and 1)
 	 *
 	 * @return the converted text
 	 *
@@ -81,6 +85,15 @@ public class EliteFileConverter {
 
 		return String.valueOf(chars);
 	}
+
+	/*
+	 * Why no exception handling above if threshold is invalid? You could make an
+	 * argument it should be included. However, nothing really breaks if the
+	 * value is invalid. If it is negative, this will NEVER convert letters. If
+	 * it is greater than 1, it will ALWAYS convert letters. Valid values can also
+	 * cause that same behavior. Since the behavior isn't invalid even though the
+	 * parameter value is, I have chosen NOT to throw an exception here.
+	 */
 
 	/**
 	 * Randomly converts certain characters to a simple version of 1337-speak.
@@ -122,6 +135,13 @@ public class EliteFileConverter {
 
 		Files.write(output, outputLines, StandardCharsets.UTF_8);
 	}
+
+	/*
+	 * Why do we throw exceptions above? We want this method to be general enough to
+	 * be used within other code. Throwing the exception here lets other developers
+	 * using this method decide what to do if something goes wrong. This is common
+	 * for methods that can run into IOException exception types.
+	 */
 
 	/**
 	 * Demonstrates a simple, but memory-intensive way to convert a text file to
@@ -200,4 +220,14 @@ public class EliteFileConverter {
 		Path nowhere = Path.of("nowhere");
 		toLeetSpeak(nowhere, nowhere);
 	}
+
+	/*
+	 * It is in the main method above that we should really catch the IOException
+	 * exceptions thrown in the code. We are just using this to demo the code for
+	 * the moment, so we'll skip that step for now.
+	 *
+	 * In a more realistic setting, we might parse command-line arguments from
+	 * the user to decide what to read from and write to, as well as decide what to
+	 * do if that argument was invalid.
+	 */
 }

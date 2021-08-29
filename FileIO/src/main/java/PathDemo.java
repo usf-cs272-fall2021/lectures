@@ -7,6 +7,7 @@ import java.nio.file.Path;
  * information.
  *
  * @see java.nio.file.Path
+ *
  * @author CS 272 Software Development (University of San Francisco)
  * @version Fall 2021
  */
