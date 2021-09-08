@@ -19,6 +19,31 @@ public class ObjectDemo {
 
 		System.out.printf("%s%n", demo.toString());
 		System.out.printf("%s%n", demo.getClass().getName());
+
+		/*
+		 * The hashcode is defined as:
+		 *
+		 * "As far as is reasonably practical, the hashCode method defined by class
+		 * Object returns distinct integers for distinct objects."
+		 *
+		 * If two objects are considered "equal" their hashcodes must be the same, but
+		 * if two objects are considered "unequal" it is possible they still have the
+		 * same hashcode. In other words, if two hashcodes are not equal, they are
+		 * definitely not equal. If the hashcode are equal, they COULD be (but not
+		 * guaranteed to be) equal.
+		 *
+		 * The API documentation used to also include this blurb:
+		 *
+		 * "This is typically implemented by converting the internal address of the
+		 * object into an integer, but this implementation technique is not required by
+		 * the JavaTM programming language."
+		 *
+		 * This means using the typical implementation, the hashcode approximately let
+		 * us know where the object is currently stored in memory (and importantly, when
+		 * two references are likely pointing to the same object in memory). This isn't
+		 * perfect though; objects move around in memory and we won't be able to rely on
+		 * having a specific implementation of the hashcode.
+		 */
 		System.out.printf("%x%n", demo.hashCode());
 		System.out.printf("%n");
 	}
