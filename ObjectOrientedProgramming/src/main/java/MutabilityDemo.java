@@ -12,6 +12,9 @@ import java.util.Arrays;
  *
  * Most data structures are mutable. However, some data structures behave
  * unexpectedly if you store within them mutable objects.
+ *
+ * @author CS 272 Software Development (University of San Francisco)
+ * @version Fall 2021
  */
 public class MutabilityDemo {
 	/**
