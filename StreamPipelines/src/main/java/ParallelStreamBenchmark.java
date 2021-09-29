@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Random;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -20,6 +21,9 @@ import java.util.stream.Stream;
  * @version Fall 2021
  */
 public class ParallelStreamBenchmark {
+	/** Random number generator for this benchmark. */
+	public static Random random = new Random(System.nanoTime());
+
 	/**
 	 * Calculates the number of times the word provided appears in a file using the
 	 * tokenize function to split lines into tokens. This method uses an extremely
@@ -168,8 +172,8 @@ public class ParallelStreamBenchmark {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static void main(String[] args) throws IOException {
-		int warmups = 5;
-		int repeats = 10;
+		int warmup = 10;
+		int timed = 10;
 
 		TreeSet<BenchmarkResult> results = new TreeSet<>(Comparator.comparingDouble(r -> r.seconds()));
 
@@ -179,20 +183,25 @@ public class ParallelStreamBenchmark {
 		SimpleBenchmark stream = ParallelStreamBenchmark::countWordsStream;
 		SimpleBenchmark parallel = ParallelStreamBenchmark::countWordsParallelStream;
 
-		System.out.print("..............");
-		results.add(concat.benchmark(0, 1, "Concat")); // takes *forever*
+		// run all of them once before benchmarking
+		System.out.println("WARMUP ROUNDS");
+		System.out.println("---------------");
+		parallel.warmup(warmup, "Parallel");
+		stream.warmup(warmup, "Stream");
+		normal.warmup(warmup, "Normal");
+		buffer.warmup(warmup, "Buffer");
+		concat.warmup(3, "Concat"); // takes **forever**, do fewer rounds
 
-		results.add(buffer.benchmark(warmups, repeats, "Buffer"));
-		results.add(normal.benchmark(warmups, repeats, "Normal"));
-		results.add(stream.benchmark(warmups, repeats, "Stream"));
-		results.add(parallel.benchmark(warmups, repeats, "Parallel"));
-		results.add(parallel.benchmark(warmups, repeats, "Parallel"));
-		results.add(stream.benchmark(warmups, repeats, "Stream"));
-		results.add(normal.benchmark(warmups, repeats, "Normal"));
-		results.add(buffer.benchmark(warmups, repeats, "Buffer"));
+		System.out.println();
 
-		System.out.print("..............");
-		results.add(concat.benchmark(0, 1, "Concat")); // takes *forever*
+		// collect actual benchmark results
+		System.out.println("TIMED ROUNDS");
+		System.out.println("--------------");
+		results.add(parallel.benchmark(timed, "Parallel"));
+		results.add(stream.benchmark(timed, "Stream"));
+		results.add(normal.benchmark(timed, "Normal"));
+		results.add(buffer.benchmark(timed, "Buffer"));
+		results.add(concat.benchmark(3, "Concat")); // takes **forever**, do fewer rounds
 
 		BenchmarkResult fast = results.first();
 		BenchmarkResult slow = results.last();
@@ -200,7 +209,7 @@ public class ParallelStreamBenchmark {
 		System.out.println();
 		System.out.printf("Fastest: %.3f (%s)%n", fast.seconds(), fast.name());
 		System.out.printf("Slowest: %.3f (%s)%n", slow.seconds(), slow.name());
-		System.out.printf("%.1fx speedup%n", slow.seconds() / fast.seconds());
+		System.out.printf("Speedup: %.1fx%n", slow.seconds() / fast.seconds());
 	}
 
 	/**
@@ -210,7 +219,6 @@ public class ParallelStreamBenchmark {
 	 */
 	@FunctionalInterface
 	public static interface SimpleBenchmark {
-
 		/** Path to test file. */
 		public static final Path PATH = Path.of("src", "main", "resources", "1400-0.txt");
 
@@ -239,37 +247,56 @@ public class ParallelStreamBenchmark {
 		}
 
 		/**
+		 * Default warmup implementation (does not save any timings).
+		 * @param rounds number of warmup rounds
+		 * @param label the benchmark label to use in output
+		 * @return unused return value
+		 * @throws IOException if an I/O error occurs
+		 */
+		public default long warmup(int rounds, String label) throws IOException {
+			long count = 0; // just to make sure we always use the result
+
+			System.out.printf("%10s: ", label);
+
+			for (int i = 0; i < rounds; i++) {
+				System.out.print(".");
+				count += method(PATH, WORD, SimpleBenchmark::tokenize);
+				count += random.nextInt(100);
+			}
+
+			System.out.println(" (done)");
+			return count;
+		}
+
+		/**
 		 * Default benchmark implementation.
 		 *
-		 * @param warmups number of warmup rounds
-		 * @param repeats number of timed rounds
+		 * @param rounds number of timed rounds
 		 * @param label the benchmark label to use in output
 		 * @return the benchmark results
 		 * @throws IOException if an I/O error occurs
 		 */
-		public default BenchmarkResult benchmark(int warmups, int repeats, String label) throws IOException {
+		public default BenchmarkResult benchmark(int rounds, String label) throws IOException {
 			long count = 0; // just to make sure we always use the result
-
-			for (int i = 0; i < warmups; i++) {
-				System.out.print(".");
-				count = Math.max(count, method(PATH, WORD, SimpleBenchmark::tokenize));
-			}
 
 			Instant start = Instant.now();
 
-			for (int i = 0; i < repeats; i++) {
+			System.out.printf("%10s: ", label);
+
+			for (int i = 0; i < rounds; i++) {
 				System.out.print(".");
-				count = Math.max(count, method(PATH, WORD, SimpleBenchmark::tokenize));
+				count += method(PATH, WORD, SimpleBenchmark::tokenize);
+				count += random.nextInt(100);
 			}
 
 			Duration elapsed = Duration.between(start, Instant.now());
-			double average = (double) elapsed.toMillis() / repeats;
+			double average = (double) elapsed.toMillis() / rounds;
 			double seconds = average / Duration.ofSeconds(1).toMillis();
 
-			String format = "%10s: Found \"%s\" %d times in %.3f seconds.%n";
-			System.out.printf(format, label, WORD, count, seconds);
+			String format = " averaged %.3f seconds%n";
+			System.out.printf(format, seconds);
 
-			return new BenchmarkResult(seconds, label);
+			return new BenchmarkResult(seconds, label, count);
 		}
 	}
 
@@ -278,9 +305,10 @@ public class ParallelStreamBenchmark {
 	 *
 	 * @param seconds the average number of seconds
 	 * @param name the name of the benchmark
+	 * @param unused the unused count value (help prevent over-optimization)
 	 */
 	@SuppressWarnings("javadoc") // javadoc + record bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=572367
-	public record BenchmarkResult(double seconds, String name) {
+	public record BenchmarkResult(double seconds, String name, long unused) {
 
 	}
 }
