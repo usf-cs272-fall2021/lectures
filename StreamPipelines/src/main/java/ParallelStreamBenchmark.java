@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -169,41 +171,36 @@ public class ParallelStreamBenchmark {
 		int warmups = 5;
 		int repeats = 10;
 
+		TreeSet<BenchmarkResult> results = new TreeSet<>(Comparator.comparingDouble(r -> r.seconds()));
+
 		SimpleBenchmark concat = ParallelStreamBenchmark::countWordsConcat;
 		SimpleBenchmark buffer = ParallelStreamBenchmark::countWordsBuffer;
 		SimpleBenchmark normal = ParallelStreamBenchmark::countWordsNormal;
 		SimpleBenchmark stream = ParallelStreamBenchmark::countWordsStream;
 		SimpleBenchmark parallel = ParallelStreamBenchmark::countWordsParallelStream;
 
-		System.out.print("  Concat: ..............");
-		concat.benchmark(0, 1); // takes *forever*
+		System.out.print("..............");
+		results.add(concat.benchmark(0, 1, "Concat")); // takes *forever*
 
-		System.out.print("  Buffer: ");
-		buffer.benchmark(warmups, repeats);
+		results.add(buffer.benchmark(warmups, repeats, "Buffer"));
+		results.add(normal.benchmark(warmups, repeats, "Normal"));
+		results.add(stream.benchmark(warmups, repeats, "Stream"));
+		results.add(parallel.benchmark(warmups, repeats, "Parallel"));
+		results.add(parallel.benchmark(warmups, repeats, "Parallel"));
+		results.add(stream.benchmark(warmups, repeats, "Stream"));
+		results.add(normal.benchmark(warmups, repeats, "Normal"));
+		results.add(buffer.benchmark(warmups, repeats, "Buffer"));
 
-		System.out.print("  Normal: ");
-		normal.benchmark(warmups, repeats);
+		System.out.print("..............");
+		results.add(concat.benchmark(0, 1, "Concat")); // takes *forever*
 
-		System.out.print("  Stream: ");
-		stream.benchmark(warmups, repeats);
+		BenchmarkResult fast = results.first();
+		BenchmarkResult slow = results.last();
 
-		System.out.print("Parallel: ");
-		parallel.benchmark(warmups, repeats);
-
-		System.out.print("Parallel: ");
-		parallel.benchmark(warmups, repeats);
-
-		System.out.print("  Stream: ");
-		stream.benchmark(warmups, repeats);
-
-		System.out.print("  Normal: ");
-		normal.benchmark(warmups, repeats);
-
-		System.out.print("  Buffer: ");
-		buffer.benchmark(warmups, repeats);
-
-		System.out.print("  Concat: ..............");
-		concat.benchmark(0, 1); // takes *forever*
+		System.out.println();
+		System.out.printf("Fastest: %.3f (%s)%n", fast.seconds(), fast.name());
+		System.out.printf("Slowest: %.3f (%s)%n", slow.seconds(), slow.name());
+		System.out.printf("%.1fx speedup%n", slow.seconds() / fast.seconds());
 	}
 
 	/**
@@ -246,9 +243,11 @@ public class ParallelStreamBenchmark {
 		 *
 		 * @param warmups number of warmup rounds
 		 * @param repeats number of timed rounds
+		 * @param label the benchmark label to use in output
+		 * @return the benchmark results
 		 * @throws IOException if an I/O error occurs
 		 */
-		public default void benchmark(int warmups, int repeats) throws IOException {
+		public default BenchmarkResult benchmark(int warmups, int repeats, String label) throws IOException {
 			long count = 0; // just to make sure we always use the result
 
 			for (int i = 0; i < warmups; i++) {
@@ -267,8 +266,21 @@ public class ParallelStreamBenchmark {
 			double average = (double) elapsed.toMillis() / repeats;
 			double seconds = average / Duration.ofSeconds(1).toMillis();
 
-			String format = "Found %d occurrences of \"%s\" in %f seconds.%n";
-			System.out.printf(format, count, WORD, seconds);
+			String format = "%10s: Found \"%s\" %d times in %.3f seconds.%n";
+			System.out.printf(format, label, WORD, count, seconds);
+
+			return new BenchmarkResult(seconds, label);
 		}
+	}
+
+	/**
+	 * Stores benchmark results.
+	 *
+	 * @param seconds the average number of seconds
+	 * @param name the name of the benchmark
+	 */
+	@SuppressWarnings("javadoc") // javadoc + record bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=572367
+	public record BenchmarkResult(double seconds, String name) {
+
 	}
 }
