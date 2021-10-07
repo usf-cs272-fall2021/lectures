@@ -73,6 +73,7 @@ public class TextFileStreamer {
 	 * function to split lines into tokens, applies the clean method to each token,
 	 * and then uses the consumer to collect the results.
 	 *
+	 * @param <C> the type of {@link Collection} to return
 	 * @param path the path to read
 	 * @param clean the function to apply to each token
 	 * @param tokenize the function to split lines into tokens
@@ -118,7 +119,9 @@ public class TextFileStreamer {
 		Function<String, String> clean = s -> s.toLowerCase().replaceAll("[^A-z\\s]+", " ");
 		System.out.println(consumeTextAsList(sally, clean));
 		System.out.println(collectTextAsList(sally, clean));
-		System.out.println(collectTextFile(sally, clean, s -> s.split("\\s+"), TreeSet::new));
+
+		TreeSet<String> set = collectTextFile(sally, clean, (String s) -> s.split("\\s+"), TreeSet<String>::new);
+		System.out.println(set);
 	}
 
 	/*
