@@ -15,8 +15,8 @@ The following lecture slides are associated with this topic:
 The following other resources may be useful:
 
 - [Introduction to Java Threads](https://developer.ibm.com/tutorials/j-threads/) (Brian Goetz, IBM Developer)
-- [Thread Pools and Work Queues](https://www.ibm.com/developerworks/library/j-jtp0730/index.html) (Brian Goetz, IBM Developer)
-- [Managing Volatility](https://www.ibm.com/developerworks/java/library/j-jtp06197/index.html) (Brian Goetz, IBM Developer)
+- [Thread Pools and Work Queues](https://web.archive.org/web/20210126172022/https://www.ibm.com/developerworks/library/j-jtp0730/index.html) (Brian Goetz, IBM Developer)
+- [Managing Volatility](https://web.archive.org/web/20210228140403/https://www.ibm.com/developerworks/java/library/j-jtp06197/index.html) (Brian Goetz, IBM Developer)
 
 ## Official Resources ##
 
