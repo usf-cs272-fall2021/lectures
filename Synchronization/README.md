@@ -7,8 +7,8 @@ These demos illustrate basic concepts related to synchronization for multithread
 
 The following lecture slides are associated with this topic:
 
-- Synchronization ([Slides](/)) ([Video](/))
-- Custom Locks ([Slides](/)) ([Video](/))
+- Synchronization ([Slides](/)) ([Video](https://drive.google.com/file/d/1XGxlAjAP10M77GLTy7mRquS6Miy9PTkh/view?usp=sharing))
+- Custom Locks ([Slides](/)) ([Video](https://drive.google.com/file/d/1M9bd401kt3RkjjcFw8jI92hMbhW4CtQP/view?usp=sharing))
 
 ## Official Resources ##
 

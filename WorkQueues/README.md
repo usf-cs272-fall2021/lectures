@@ -7,8 +7,8 @@ These demos illustrate basic concepts related to synchronization for multithread
 
 The following lecture slides are associated with this topic:
 
-- The Volatile Keyword ([Slides](/)) ([Video](/))
-- Thread Pools and Work Queues ([Slides](/)) ([Video](/))
+- The Volatile Keyword ([Slides](/)) ([Video](https://drive.google.com/file/d/1PtN8QKiJurwN1aIi0bruYMNnA7aJgnC8/view?usp=sharing))
+- Thread Pools and Work Queues ([Slides](/)) ([Video](https://drive.google.com/file/d/1Nz47N4dqlnypm3HSvtOB0iMwmO35aMgR/view?usp=sharing))
 
 ## Other Resources ##
 
