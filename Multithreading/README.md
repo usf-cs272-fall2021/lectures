@@ -7,9 +7,9 @@ These demos illustrate basic concepts related to multithreading.
 
 The following lecture slides are associated with this topic:
 
-- Multithreading Introduction ([Slides](/)) ([Video](https://drive.google.com/file/d/1bDx_QfV8uXgxBnMuGW1BifaOkcHuVsxU/view?usp=sharing))
-- Thread Lifecycle ([Slides](/)) ([Video](https://drive.google.com/file/d/19WIE-aE_n2okfI-Evk7OMEtCUvzaCSwT/view?usp=sharing))
-- Thread Synchronization ([Slides](/)) ([Video](https://drive.google.com/file/d/1XGxlAjAP10M77GLTy7mRquS6Miy9PTkh/view?usp=sharing))
+- Multithreading ([Slides](https://docs.google.com/presentation/d/e/2PACX-1vSdp9XCSHSyPd_uRErfIgL1TIV0kd83eHXbDqq3DaSGrHcMZ77iKzsGO9_3XkRDG0y7YKFErwKDHrH4/pub?start=false&loop=false&delayms=3000)) ([Video](https://drive.google.com/file/d/1bDx_QfV8uXgxBnMuGW1BifaOkcHuVsxU/view?usp=sharing))
+- Thread Lifecycle ([Slides](https://docs.google.com/presentation/d/e/2PACX-1vST58GQ2KwGV5U4iIp-y03mXwLwlGWT7ndYF3NsByv6sZfWZQw37RXlHM8UxtaohwmPD1zaOXM9r0gF/pub?start=false&loop=false&delayms=3000)) ([Video](https://drive.google.com/file/d/19WIE-aE_n2okfI-Evk7OMEtCUvzaCSwT/view?usp=sharing))
+- Synchronization ([Slides](https://docs.google.com/presentation/d/e/2PACX-1vRAa63kBV969kPKTLfUaotLDcmEWetYZwso8dBEnm04LVUQYfYX1Od6rVZCpUUEdssanqxlKvDGr3dL/pub?start=false&loop=false&delayms=3000)) ([Video](https://drive.google.com/file/d/1XGxlAjAP10M77GLTy7mRquS6Miy9PTkh/view?usp=sharing))
 - Thread Liveness ([Slides](/)) ([Video](https://drive.google.com/file/d/1ZoPqrdm4e2exLo9djFJcoLKBRwNMOEII/view?usp=sharing))
 
 ## Official Resources ##
