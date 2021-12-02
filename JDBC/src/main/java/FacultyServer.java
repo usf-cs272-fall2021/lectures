@@ -8,8 +8,6 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-// TODO Sorting courses, filtering by course
-
 /**
  * Demonstrates how to interact with a database server using JDBC and Jetty.
  *
