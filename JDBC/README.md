@@ -28,7 +28,6 @@ If you are a Windows user, you can use Windows Terminal to setup the tunnel (or 
 The following official [Java Tutorials](http://docs.oracle.com/javase/tutorial/index.html) may be useful:
 
 - [The Java Tutorials – Lesson: JDBC Basics](https://docs.oracle.com/javase/tutorial/jdbc/basics/index.html)
-## Security Notes ## 
 
 ## Security Notes ##
 
