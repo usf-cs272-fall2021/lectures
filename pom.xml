@@ -19,7 +19,7 @@
 		<platformVersion>1.7.2</platformVersion>
 
 		<opennlpVersion>1.9.3</opennlpVersion>
-		<logj4Version>2.14.1</logj4Version>
+		<logj4Version>2.15.0</logj4Version>
 		<commonsLang3Version>3.12.0</commonsLang3Version>
 		<commonsTextVersion>1.9</commonsTextVersion>
 
